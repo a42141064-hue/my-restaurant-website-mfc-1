@@ -134,6 +134,26 @@
         <input id="customer-name" type="text" placeholder="Your Name *" class="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
         <input id="customer-phone" type="tel" placeholder="Phone Number *" class="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
         <textarea id="customer-address" rows="2" placeholder="Delivery Address *" class="w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"></textarea>
+        <div class="pt-1">
+          <p class="text-xs font-semibold text-gray-600 mb-2">Payment Method *</p>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex flex-col items-center gap-1 border rounded-xl p-2.5 cursor-pointer hover:border-secondary has-[:checked]:border-secondary has-[:checked]:bg-red-50 transition">
+              <input type="radio" name="payment" value="COD" class="sr-only" checked>
+              <span class="text-lg">💵</span>
+              <span class="text-[11px] font-semibold">COD</span>
+            </label>
+            <label class="flex flex-col items-center gap-1 border rounded-xl p-2.5 cursor-pointer hover:border-secondary has-[:checked]:border-secondary has-[:checked]:bg-red-50 transition">
+              <input type="radio" name="payment" value="EasyPaisa" class="sr-only">
+              <span class="text-lg">📱</span>
+              <span class="text-[11px] font-semibold">EasyPaisa</span>
+            </label>
+            <label class="flex flex-col items-center gap-1 border rounded-xl p-2.5 cursor-pointer hover:border-secondary has-[:checked]:border-secondary has-[:checked]:bg-red-50 transition">
+              <input type="radio" name="payment" value="JazzCash" class="sr-only">
+              <span class="text-lg">📲</span>
+              <span class="text-[11px] font-semibold">JazzCash</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <div id="store-status" class="text-center text-sm font-semibold py-2 rounded-lg mb-2"></div>
@@ -673,6 +693,8 @@
       const name = document.getElementById('customer-name').value.trim();
       const phone = document.getElementById('customer-phone').value.trim();
       const address = document.getElementById('customer-address').value.trim();
+      const paymentEl = document.querySelector('input[name="payment"]:checked');
+      const payment = paymentEl ? paymentEl.value : 'COD';
 
       if (!name || !phone || !address) {
         alert('Please fill Name, Phone and Address.');
@@ -681,29 +703,71 @@
 
       const orderNo = getNextOrderNumber();
       const now = new Date();
-      const timeStr = now.toLocaleString('en-PK', { timeZone: 'Asia/Karachi' });
-
-      let msg = `*MUSTAN FOOD CENTRE - NEW ORDER*%0A%0A`;
-      msg += `*Order No: #${orderNo}*%0A`;
-      msg += `*Time:* ${timeStr}%0A%0A`;
-      msg += `*Customer:* ${name}%0A`;
-      msg += `*Phone:* ${phone}%0A`;
-      msg += `*Address:* ${address}%0A%0A`;
-      msg += `*ORDER DETAILS:*%0A`;
-      msg += `------------------------%0A`;
-
-      cart.forEach(item => {
-        msg += `• ${item.name} x${item.qty} = Rs. ${item.price * item.qty}%0A`;
+      const timeStr = now.toLocaleString('en-PK', {
+        timeZone: 'Asia/Karachi',
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
       });
 
       const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-      msg += `------------------------%0A`;
-      msg += `Subtotal: Rs. ${subtotal}%0A`;
-      msg += `Delivery Fee: Rs. ${DELIVERY_FEE}%0A`;
-      msg += `*TOTAL: Rs. ${subtotal + DELIVERY_FEE}*%0A%0A`;
-      msg += `Please confirm my order. JazakAllah!`;
+      const total = subtotal + DELIVERY_FEE;
 
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+      // Beautiful invoice-style WhatsApp message
+      let lines = [];
+      lines.push('══════════════════════════');
+      lines.push('   *MUSTAN FOOD CENTRE*');
+      lines.push('   Where Taste Comes First');
+      lines.push('══════════════════════════');
+      lines.push('');
+      lines.push('🧾 *ORDER INVOICE*');
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+      lines.push('📌 *Order No:*  *#' + orderNo + '*');
+      lines.push('🕐 *Date/Time:*  ' + timeStr);
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+      lines.push('');
+      lines.push('👤 *CUSTOMER DETAILS*');
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+      lines.push('Name:  ' + name);
+      lines.push('Phone:  ' + phone);
+      lines.push('Address:  ' + address);
+      lines.push('Payment:  *' + payment + '*');
+      lines.push('');
+      lines.push('🛒 *ORDER ITEMS*');
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+
+      cart.forEach((item, i) => {
+        const lineTotal = item.price * item.qty;
+        lines.push((i + 1) + '. ' + item.name);
+        lines.push('    ' + item.qty + ' x Rs. ' + item.price + '  =  *Rs. ' + lineTotal + '*');
+      });
+
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+      lines.push('Subtotal:           Rs. ' + subtotal);
+      lines.push('Delivery Fee:       Rs. ' + DELIVERY_FEE);
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+      lines.push('💰 *GRAND TOTAL:  Rs. ' + total + '*');
+      lines.push('━━━━━━━━━━━━━━━━━━━━━━━━');
+      lines.push('💳 Payment Method: *' + payment + '*');
+      if (payment === 'EasyPaisa' || payment === 'JazzCash') {
+        lines.push('');
+        lines.push('⚠️ Please send payment screenshot after transferring.');
+      }
+      lines.push('');
+      lines.push('📍 Home Delivery: 0325-2632632');
+      lines.push('🙏 Please confirm this order.');
+      lines.push('JazakAllah Khair!');
+      lines.push('');
+      lines.push('══════════════════════════');
+      lines.push('Thank you for ordering from MFC!');
+      lines.push('══════════════════════════');
+
+      const msg = lines.join('\n');
+      const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg);
       window.open(url, '_blank');
 
       alert('Order placed successfully!\n\nYour Order Number: #' + orderNo + '\n\nPlease keep this number for reference.');
