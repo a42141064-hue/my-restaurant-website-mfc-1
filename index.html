@@ -48,7 +48,7 @@
     .qty-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; }
   </style>
 </head>
-<body class="font-sans text-dark antialiased bg-white">
+<body class="font-sans text-dark antialiased bg-white pb-16 md:pb-0">
 
   <!-- ========== NAVBAR ========== -->
   <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
@@ -62,8 +62,14 @@
           </div>
         </a>
 
+        <div class="hidden lg:flex items-center gap-1.5 text-xs text-gray-500 border-l border-gray-200 pl-4 ml-1">
+          <svg class="w-4 h-4 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Model Colony, Karachi
+        </div>
+
         <div class="hidden md:flex items-center gap-7">
           <a href="#home" class="text-sm font-medium hover:text-primary transition">Home</a>
+          <a href="#popular" class="text-sm font-medium hover:text-primary transition">Popular</a>
           <a href="#deals" class="text-sm font-medium hover:text-primary transition">Deals</a>
           <a href="#menu" class="text-sm font-medium hover:text-primary transition">Menu</a>
           <a href="#about" class="text-sm font-medium hover:text-primary transition">About</a>
@@ -92,6 +98,7 @@
     <div id="mobile-menu" class="hidden md:hidden glass border-t border-primary/20">
       <div class="px-4 py-4 space-y-3">
         <a href="#home" class="block py-2 hover:text-primary">Home</a>
+        <a href="#popular" class="block py-2 hover:text-primary">Popular</a>
         <a href="#deals" class="block py-2 hover:text-primary">Deals</a>
         <a href="#menu" class="block py-2 hover:text-primary">Menu</a>
         <a href="#about" class="block py-2 hover:text-primary">About</a>
@@ -237,6 +244,20 @@
     </div>
   </section>
 
+  <!-- ========== POPULAR ITEMS ========== -->
+  <section id="popular" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-10 fade-up">
+        <span class="text-primary font-semibold tracking-widest text-sm uppercase">Customer Favorites</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold mt-2 text-dark">Popular <span class="text-secondary">Items</span></h2>
+        <div class="w-20 h-1 bg-secondary rounded-full mt-4"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="popular-grid">
+        <!-- Popular items injected by JS -->
+      </div>
+    </div>
+  </section>
+
   <!-- ========== DEALS SECTION ========== -->
   <section id="deals" class="py-20 bg-[#111111]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -346,6 +367,31 @@
     </div>
   </footer>
 
+  <!-- ========== BOTTOM NAV (Mobile) ========== -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] flex justify-around items-stretch h-16">
+    <a href="#home" class="flex flex-col items-center justify-center gap-0.5 text-secondary flex-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h4a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h4a1 1 0 001-1V10"/></svg>
+      <span class="text-[10px] font-semibold">Home</span>
+    </a>
+    <a href="#menu" class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-secondary transition flex-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span class="text-[10px] font-semibold">Menu</span>
+    </a>
+    <button onclick="toggleCart()" class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-secondary transition flex-1 relative">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      <span class="text-[10px] font-semibold">Cart</span>
+      <span id="cart-count-bottom" class="absolute top-0 right-5 bg-primary text-dark text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+    </button>
+    <a href="#deals" class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-secondary transition flex-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5.586a2 2 0 011.414.586l7 7a2 2 0 010 2.828l-6.586 6.586a2 2 0 01-2.828 0l-7-7A2 2 0 013 10.586V5a2 2 0 012-2z"/></svg>
+      <span class="text-[10px] font-semibold">Deals</span>
+    </a>
+    <a href="#contact" class="flex flex-col items-center justify-center gap-0.5 text-gray-400 hover:text-secondary transition flex-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+      <span class="text-[10px] font-semibold">Contact</span>
+    </a>
+  </nav>
+
   <!-- Toast -->
   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-dark text-white px-6 py-3 rounded-full shadow-2xl opacity-0 transition-opacity duration-300 z-[100] pointer-events-none">
     Item added to cart!
@@ -370,6 +416,17 @@
       { id: "deal8", name: "Deal 8", desc: "2 Leg Tikka + 4 Pori Paratha", price: 950, img: "assets/deal8.jpg" },
       { id: "deal9", name: "Deal 9", desc: "Small Pasta + Small Pizza + Fries", price: 700, img: "assets/deal9.jpg" },
       { id: "deal10", name: "Deal 10", desc: "1 Club Sandwich + 2 Zinger Roll + 1 Burger with Fries", price: 1300, img: "assets/deal10.jpg" },
+    ];
+
+    // Featured items shown in the "Popular Items" section (ids match menuData keys so
+    // quantities merge correctly if the same item is also added from the Menu grid)
+    const popularItems = [
+      { id: 'burger_2', name: 'Mastan Special Burger', desc: 'Our signature stacked burger with double sauce and melted cheese.', price: 599, img: 'assets/mfc-burger.png', rating: 4.8 },
+      { id: 'karahi_6', name: 'Special Chicken Karahi', desc: 'Rich tomato-based curry cooked with tender chicken and authentic spices.', price: 1250, img: 'assets/chicken-karahi.jpg', rating: 4.9 },
+      { id: 'platter_0', name: 'Bar BBQ Platter (2 Persons)', desc: 'Mixed tikka, boti & kabab platter — perfect for sharing.', price: 2400, img: 'assets/sizzling-bbq.jpg', rating: 4.7 },
+      { id: 'pasta_6', name: 'Alfredo Pasta', desc: 'Creamy white sauce pasta loaded with grilled chicken.', price: 700, img: 'assets/alfredo-pasta.jpg', rating: 4.6 },
+      { id: 'burger_0', name: 'Zinger Burger', desc: 'Crispy zinger fillet, fresh lettuce & mayo in a soft bun.', price: 450, img: 'assets/burger-new.jpg', rating: 4.5 },
+      { id: 'chinese_1', name: 'Chicken Fried Rice', desc: 'Wok-tossed rice with chicken, egg & spring onions.', price: 550, img: 'assets/chinese-rice.jpg', rating: 4.4 },
     ];
 
     const menuData = {
@@ -604,6 +661,8 @@
       const count = cart.reduce((s, i) => s + i.qty, 0);
       document.getElementById('cart-count').textContent = count;
       document.getElementById('cart-count-mobile').textContent = count;
+      const bottomBadge = document.getElementById('cart-count-bottom');
+      if (bottomBadge) bottomBadge.textContent = count;
 
       const container = document.getElementById('cart-items');
       const emptyMsg = document.getElementById('empty-cart-msg');
@@ -803,6 +862,36 @@
       `).join('');
     }
 
+    // ========== RENDER POPULAR ITEMS ==========
+    function renderPopular() {
+      const grid = document.getElementById('popular-grid');
+      if (!grid) return;
+      grid.innerHTML = popularItems.map(p => `
+        <div class="menu-card bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 flex flex-col transition-all duration-300">
+          <div class="relative h-40 w-full overflow-hidden">
+            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover">
+          </div>
+          <div class="p-4 flex flex-col flex-1">
+            <div class="flex justify-between items-start mb-1 gap-2">
+              <h4 class="font-bold text-base leading-tight">${p.name}</h4>
+              <div class="flex items-center gap-1 text-primary shrink-0">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 1l2.9 6.26L19 8.27l-4.5 4.38L15.8 19 10 15.77 4.2 19l1.3-6.35L1 8.27l6.1-1.01z"/></svg>
+                <span class="text-xs font-semibold">${p.rating}</span>
+              </div>
+            </div>
+            <p class="text-gray-500 text-xs mb-4 leading-relaxed min-h-[32px]">${p.desc}</p>
+            <div class="mt-auto flex justify-between items-center">
+              <span class="text-primary font-extrabold">Rs. ${p.price}</span>
+              <button onclick="addToCart('${p.id}', '${p.name}', ${p.price}, '${p.img}')"
+                class="w-9 h-9 rounded-full bg-secondary text-white flex items-center justify-center hover:bg-red-700 transition shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
     // ========== RENDER MENU ==========
     let currentCategory = 'all';
 
@@ -825,7 +914,7 @@
       ];
 
       document.getElementById('category-buttons').innerHTML = cats.map(c => `
-        <button onclick="showCategory('${c.key}')" class="category-btn ${c.key === 'all' ? 'active' : ''} group flex flex-col items-center">
+        <button onclick="showCategory('${c.key}', event)" class="category-btn ${c.key === 'all' ? 'active' : ''} group flex flex-col items-center">
           <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white shadow-md border-4 border-transparent overflow-hidden mb-2 transition-all hover:scale-105 group-[.active]:border-secondary">
             <img src="${c.img}" alt="${c.label}" class="w-full h-full object-cover">
           </div>
@@ -835,10 +924,12 @@
       `).join('');
     }
 
-    function showCategory(cat) {
+    function showCategory(cat, evt) {
       currentCategory = cat;
       document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-      event.currentTarget.classList.add('active');
+      const activeBtn = (evt && evt.currentTarget) ||
+        document.querySelector(`.category-btn[onclick^="showCategory('${cat}'"]`);
+      if (activeBtn) activeBtn.classList.add('active');
 
       const grid = document.getElementById('menu-grid');
       let html = '';
@@ -894,6 +985,7 @@
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
     renderDeals();
+    renderPopular();
     renderCategories();
     showCategory('all');
     updateCartUI();
